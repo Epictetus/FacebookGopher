@@ -1,6 +1,6 @@
 # Facebook Gopher #
 
-*A little library that lets you connect to the Facebook Graph API.*
+**A little library that lets you connect to the Facebook Graph API.**
 
 Rather more lightweight than the excellent Facebooker, it helps with Facebook OAuth, provides methods to access the graph API, and gives lots of feedback should you go wrong. Simply instantiate a Gopher, pass it the necessary parameters, and make your call. 
 
@@ -62,11 +62,18 @@ You can see any other part of the API, just pass it as a string:
 
 
 
-# Testing #
+## Testing ##
 
 The test suite uses Test::Unit and requires the mocha and webmock gems to work.
 
+## About Me ##
 
+**Copyright (c) 2011 Nicholas Johnson**
 
-Copyright (c) 2011 Nicholas Johnson (http://www.twitter.com/goldfidget, http://webofawesome.com), 
-released under the MIT license
+http://www.twitter.com/goldfidget
+
+http://webofawesome.com)
+
+Released under the MIT license
+
+Please do feel free to get in touch.
