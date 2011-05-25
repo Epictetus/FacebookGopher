@@ -104,9 +104,9 @@ The test suite uses Test::Unit and requires the mocha and webmock gems to work.
 
 **Copyright (c) 2011 Nicholas Johnson**
 
-http://www.twitter.com/goldfidget
-http://webofawesome.com
-nicholas@domdedom.com
+* http://www.twitter.com/goldfidget
+* http://webofawesome.com
+* nicholas@domdedom.com
 
 Extracted from the www.higgidy.co.uk project
 
