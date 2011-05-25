@@ -8,7 +8,17 @@ I'm a big fan of staying close to the API, so Gopher doesn't give you too much a
 
 It works in Rails 3, but should work in Rails 2 just as well.
 
-##Facebook OAuth
+## Instalation ##
+
+If you're using Rails, just drop the directory into vendor/plugins. If you need it in a controller or model, just include it:
+
+    include FacebookGopher
+    
+### Installation without Rails
+
+If you're not on Rails, you can use the FacebookGopher.rb file in isolation. Just pop it somewhere importable, and require it. It requires the Rails JSON gem, so you'll need to make sure this is available.
+
+## Facebook OAuth ##
 
 OAuth is a three step process. 
 
@@ -21,9 +31,11 @@ Gopher helps with steps 1 and 3.
 ### The OAuth URL method: oauth_url ###
 
 This method returns an oauth url that you can redirect your user to. The user will be validated and Facebook will redirect them to your return URL.
-
+    
+    include FacebookGopher
+    
     def new
-      gopher = FacebookGopher.new :client_id => @client_id, :redirect_uri => @return_url, :scope => @scope
+      gopher = FacebookGopher::Gopher.new :client_id => @client_id, :redirect_uri => @return_url, :scope => @scope
       redirect_to gopher.oauth_url
     end
   
@@ -31,10 +43,12 @@ This method returns an oauth url that you can redirect your user to. The user wi
 
 Before it can be used, you need to swap the code for a token. Facebook Gopher handles this. In your controller, you might do something like:
 
+    include FacebookGopher
+    
     def create
       code = params[:code]
       if (code)
-        gopher = FacebookGopher.new :code => code, :redirect_uri => @return_url, :app_id => @app_id, :secret => @secret
+        gopher = FacebookGopher::Gopher.new :code => code, :redirect_uri => @return_url, :app_id => @app_id, :secret => @secret
         @token = gopher.get_token
         # Store the token if you wish and make your API calls using the gopher. Everything is set up.
         redirect_to thanks_path # Thank the user.
@@ -48,7 +62,9 @@ Before it can be used, you need to swap the code for a token. Facebook Gopher ha
 
 Making API calls is easy. The default call simply pulls 'me' returning all the user's details that we are authorised to see.
 
-    gopher = FacebookGopher.new :token => token
+    include FacebookGopher
+    
+    gopher = FacebookGopher::Gopher.new :token => token
     user_data = gopher.get
     
     user_data['name']
@@ -60,7 +76,25 @@ You can see any other part of the API, just pass it as a string:
     gopher = FacebookGopher.new :token => token
     user_data = gopher.get('me/posts')
 
+## Parsing a signed request ##
 
+You can use FacebookGopher to parse a signed request. If your app is running in an iframe, Facebook will pass  you a little encoded hash. You can decode it using your secret something like the following:
+
+    gopher = FacebookGopher::Gopher.new(:secret => @secret, :signed_request => params[:signed_request])
+    request = gopher.parse_signed_request
+    
+### 
+
+### Finding out if a user likes your page from within an app ###
+
+A common use case is to find out if a user likes your page, and ask them to like it before they can use your app. You can do this easily in your controller by parsing the signed_request parameter and popping out 'liked':
+
+    def index
+      if params[:signed_request]
+        signed_request = FacebookGopher::Gopher.new.parse_signed_request(:secret => @secret, :signed_request => params[:signed_request])
+        @liked = signed_request['liked'] == 'true';
+      end
+    end
 
 ## Testing ##
 
@@ -71,8 +105,10 @@ The test suite uses Test::Unit and requires the mocha and webmock gems to work.
 **Copyright (c) 2011 Nicholas Johnson**
 
 http://www.twitter.com/goldfidget
+http://webofawesome.com
+nicholas@domdedom.com
 
-http://webofawesome.com)
+Extracted from the www.higgidy.co.uk project
 
 Released under the MIT license
 
